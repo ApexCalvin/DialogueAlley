@@ -10,13 +10,3 @@ One exciting feature of Dialogue Alley is that it allows users to engage in real
 
 Another exciting feature of Dialogue Alley is that it has a robust search function. Users can search for other users and hashtags to find relevant content.
 Overall, this Twitter clone application uses Spring Boot, Java, and React in an exciting way to provide a seamless and interactive user experience.
-
-As a user (not logged in):
-I can view list of all tweets from all users
-As a user (logged in)
-Can post a new tweet (limited to 255 chars)
-Can view list of all tweets
-Can use “@” notation to direct a tweet to another user
-Can add images/links to tweets
-All new tweets appear in timeline as they come in
-Can search by “#” hashtags
