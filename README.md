@@ -9,4 +9,5 @@ The front-end of the application is built using React. It allows users to create
 One exciting feature of Dialogue Alley is that it allows users to engage in real-time conversations with each other. Users posts appear instantly on the user’s feed without the need to refresh the page. This is achieved using WebSockets and the Spring WebSocket module.
 
 Another exciting feature of Dialogue Alley is that it has a robust search function. Users can search for other users and hashtags to find relevant content.
+
 Overall, this Twitter clone application uses Spring Boot, Java, and React in an exciting way to provide a seamless and interactive user experience.
