@@ -38,8 +38,8 @@ public class HashtagController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Hashtag> updateProfile(@RequestBody Hashtag hashtag, @PathVariable Integer id) {
+    @PutMapping("/{id}") //BROKEN, BUT NOT NEEDED FOR DEMO
+    public ResponseEntity<Hashtag> updateHashtag(@RequestBody Hashtag hashtag, @PathVariable Integer id) {
         try{
             hashtagServices.saveHashtag(hashtag);
             return new ResponseEntity<>(hashtag, HttpStatus.OK);
