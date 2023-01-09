@@ -18,13 +18,6 @@ public class Profile {
     @JsonIgnoreProperties("assoc_profile") //ignores printing of assoc_profile_id
     @Fetch(value = FetchMode.SUBSELECT) //tells how to do a select
     private List<Post> userPosts;
-    /*
-    TODO - Annotation maintains the relationship (fk) between the different objects (profile -> post)
-    TODO - Fetch: also pull in the posts(info) when being fetched to userPosts list
-    TODO - Cascade:
-    TODO - MappedBy: tells this entity how to point to the relationship obj you assoc it to
-    TODO - TargetEntity: targetClass
-     */
 
     public Profile() {}
 
