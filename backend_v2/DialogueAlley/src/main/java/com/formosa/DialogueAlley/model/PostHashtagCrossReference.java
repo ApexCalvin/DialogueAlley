@@ -2,6 +2,7 @@ package com.formosa.DialogueAlley.model;
 
 import jakarta.persistence.*;
 
+@Entity
 public class PostHashtagCrossReference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
