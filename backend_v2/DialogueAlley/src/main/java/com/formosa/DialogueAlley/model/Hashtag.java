@@ -1,23 +1,34 @@
 package com.formosa.DialogueAlley.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Hashtag {
+@Table(name = "Hashtag")
+public class Hashtag implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer hashtag_id;
+    @Column
     private String hashtag;
-    @OneToMany
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hashtag")
     private List<PostHashtagCrossReference> crossReferenceToPost;
 
     public Hashtag() {}
 
-    public Integer getId() { return id; }
+    public Integer getHashtag_id() {return hashtag_id;}
 
-    public void setId(Integer id) { this.id = id; }
+    public void setHashtag_id(Integer hashtag_id) {this.hashtag_id = hashtag_id;}
 
     public String getHashtag() { return hashtag; }
 

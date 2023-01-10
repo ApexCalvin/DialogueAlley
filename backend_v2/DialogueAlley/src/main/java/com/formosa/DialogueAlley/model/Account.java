@@ -2,27 +2,44 @@ package com.formosa.DialogueAlley.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Account {
+@Table(name = "Account")
+public class Account implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer account_id;
+    @Column
     private String username;
+    @Column
     private String password;
+    @Column
     private String first_name;
+    @Column
     private String last_name;
+    @Column
     private String handle;
-    @OneToMany
+
+    @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL,
+                mappedBy = "assoc_account", targetEntity = Post.class)
+    @JsonIgnoreProperties("assoc_account")
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Post> userPosts;
 
     public Account() {}
 
-    public Integer getId() {return id;}
+    public Integer getAccount_id() {return account_id;}
 
-    public void setId(Integer id) {this.id = id;}
+    public void setAccount_id(Integer account_id) {this.account_id = account_id;}
 
     public String getUsername() {return username;}
 

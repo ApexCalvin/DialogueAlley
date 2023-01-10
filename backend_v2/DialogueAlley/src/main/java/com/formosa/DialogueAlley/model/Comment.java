@@ -1,32 +1,40 @@
 package com.formosa.DialogueAlley.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.io.Serial;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
-public class Comment {
+@Table(name = "Comment")
+public class Comment implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private Date date_time;
+    private Integer comment_id;
+    @Column
+    private Timestamp date_time;
+    @Column
     private String message;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id")
+    @JsonIgnoreProperties("postComments")
     private Post assoc_post;
 
     public Comment() {}
 
-    public Integer getId() {
-        return id;
-    }
+    public Integer getComment_id() {return comment_id;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public void setComment_id(Integer comment_id) {this.comment_id = comment_id;}
 
-    public Date getDate_time() {return date_time;}
+    public Timestamp getDate_time() {return date_time;}
 
-    public void setDate_time(Date date_time) {this.date_time = date_time;}
+    public void setDate_time(Timestamp date_time) {this.date_time = date_time;}
 
     public String getMessage() {return message;}
 
