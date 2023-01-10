@@ -1,7 +1,9 @@
 package com.formosa.DialogueAlley.controller;
 
+import com.formosa.DialogueAlley.model.Account;
 import com.formosa.DialogueAlley.model.Post;
 import com.formosa.DialogueAlley.repository.AccountRepository;
+import com.formosa.DialogueAlley.repository.PostRepository;
 import com.formosa.DialogueAlley.services.PostServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,13 @@ import java.util.NoSuchElementException;
 @RequestMapping("/post")
 @CrossOrigin("http://localhost:3000")
 public class PostController {
-
     @Autowired
     PostServices postServices;
     @Autowired
-    private AccountRepository profileRepository;
+    AccountRepository accountRepository;
+    @Autowired
+    PostRepository postRepository;
+
 
     @PostMapping("/add")
     public String addPost(@RequestBody Post post) {
@@ -57,4 +61,15 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+//    @GetMapping("/searchHandle/{handle}")
+//    public List<Post> findPostsByHandle(@PathVariable String handle) {
+//        Account account = accountRepository.findAccountByHandle(handle);
+//        return postRepository.findPostsByAccountId(account.getId());
+//    }
+//
+//    @GetMapping("/searchHashtag/{hashtag}")
+//    public List<Post> findPostsByHashtag(@PathVariable String hashtag) {
+//        return postServices.findPostsByHashtag(hashtag);
+//    }
 }
