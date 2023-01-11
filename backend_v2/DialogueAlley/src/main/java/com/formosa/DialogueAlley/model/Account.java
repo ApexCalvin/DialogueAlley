@@ -20,13 +20,13 @@ public class Account implements Serializable {
     private Integer account_id;
     @Column(nullable = false)
     private String username;
-    @Column
+    @Column(nullable = false)
     private String password;
-    @Column
+    @Column(nullable = false)
     private String first_name;
     @Column
     private String last_name;
-    @Column
+    @Column(nullable = false)
     private String handle;
 
     @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL,

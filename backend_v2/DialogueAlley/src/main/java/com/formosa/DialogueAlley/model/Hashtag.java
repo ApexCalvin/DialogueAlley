@@ -17,7 +17,7 @@ public class Hashtag implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer hashtag_id;
-    @Column
+    @Column(nullable = false)
     private String hashtag;
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true,

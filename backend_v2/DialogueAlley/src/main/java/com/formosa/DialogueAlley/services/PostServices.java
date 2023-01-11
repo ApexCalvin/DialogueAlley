@@ -28,7 +28,7 @@ public class PostServices {
 //    @Autowired
 //    PostHashtagCrossReferenceRepository crossReferenceRepository;
 
-    public boolean savePost(PostSaveDTO post) {
+    public Boolean savePost(PostSaveDTO post) {
 
         Optional<Account> account = accountRepository.findById(post.getAccount_id());
 
