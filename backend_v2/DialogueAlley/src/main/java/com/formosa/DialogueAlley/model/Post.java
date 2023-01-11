@@ -1,6 +1,7 @@
 package com.formosa.DialogueAlley.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.formosa.DialogueAlley.model.DTO.PostListDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -10,11 +11,33 @@ import org.hibernate.annotations.LazyCollectionOption;
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "Post")
+//"NAMED" CUSTOM QUERY, QUERY SET UP
+@NamedNativeQuery(name = "query_name",
+        query = """
+        SELECT a.first_name, a.last_name, a.handle, p.date_time, p.message FROM account a
+        JOIN post p
+        ON p.account_id = a.account_id
+        WHERE :handle = a.handle
+        ORDER BY date_time ASC
+        """,
+        resultSetMapping = "result_set_name")
+// TELLING NAMED QUERY WHAT RESULT SET TO MAP TO
+@SqlResultSetMapping(
+        name = "result_set_name",
+        classes = @ConstructorResult(targetClass = PostListDTO.class,columns = {
+                @ColumnResult(name = "first_name", type = String.class),
+                @ColumnResult(name = "last_name", type = String.class),
+                @ColumnResult(name = "handle", type = String.class),
+                @ColumnResult(name = "date_time", type = Date.class),
+                @ColumnResult(name = "message", type = String.class)})
+)
 public class Post implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -22,11 +45,11 @@ public class Post implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer post_id;
     @Column
-    private Timestamp date_time;
+    private Date date_time;
     @Column
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     @JsonIgnoreProperties("userPosts")
     private Account assoc_account;
@@ -37,8 +60,9 @@ public class Post implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Comment> postComments;
 
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true,
+                mappedBy = "post") //targetEntity = PostHashtagCrossReference.class
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "post")
     private List<PostHashtagCrossReference> crossReferenceToHashtag;
 
     public Post() {}
@@ -47,9 +71,13 @@ public class Post implements Serializable {
 
     public void setPost_id(Integer post_id) {this.post_id = post_id;}
 
-    public Timestamp getDate_time() {return date_time;}
+    public Date getDate_time() {
+        return date_time;
+    }
 
-    public void setDate_time(Timestamp date_time) {this.date_time = date_time;}
+    public void setDate_time(Date date_time) {
+        this.date_time = date_time;
+    }
 
     public String getMessage() {
         return message;
