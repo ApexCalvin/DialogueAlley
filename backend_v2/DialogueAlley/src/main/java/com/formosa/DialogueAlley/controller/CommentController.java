@@ -1,6 +1,7 @@
 package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Comment;
+import com.formosa.DialogueAlley.model.DTO.CommentSaveDTO;
 import com.formosa.DialogueAlley.services.CommentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,14 @@ public class CommentController {
     CommentServices commentServices;
 
     @PostMapping("/add")
-    public String addComment(@RequestBody Comment comment) {
-        commentServices.saveComment(comment);
-        return "Comment has been created.";
+    public String addComment(@RequestBody CommentSaveDTO comment) {
+        boolean exist = commentServices.saveComment(comment);
+
+        if (exist) {
+            return "Comment has been created.";
+        } else {
+            return "Failed to create a comment.";
+        }
     }
 
     @GetMapping("/all")
@@ -38,15 +44,15 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment, @PathVariable Integer id) {
-        try{
-            commentServices.saveComment(comment);
-            return new ResponseEntity<>(comment, HttpStatus.OK);
-        }catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment, @PathVariable Integer id) {
+//        try{
+//            commentServices.saveComment(comment);
+//            return new ResponseEntity<>(comment, HttpStatus.OK);
+//        }catch (NoSuchElementException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
     @DeleteMapping("/{id}")
     public String deleteCCommentById(@PathVariable Integer id) {

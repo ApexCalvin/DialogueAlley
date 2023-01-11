@@ -46,7 +46,7 @@ public class Post implements Serializable {
     private Integer post_id;
     @Column
     private Date date_time;
-    @Column
+    @Column(nullable = false)
     private String message;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
