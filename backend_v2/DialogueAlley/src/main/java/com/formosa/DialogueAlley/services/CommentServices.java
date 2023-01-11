@@ -20,20 +20,24 @@ public class CommentServices {
     AccountRepository accountRepository;
 
     public Boolean saveComment(CommentSaveDTO comment) { // POST/CREATE
+
         Optional<Account> account = accountRepository.findById(comment.getAccount_id());
 
         if (account.isPresent()){
             Comment comment1 = new Comment();
-           // comment1.getAssoc_account(account.get());
-            if (comment.getDate_time() != null) {
-                //comment1.setDate_time(comment.getDate_time());
-            } else {
-                //comment1.setDate_time(new Date());
-            }
+            comment1.setAssoc_account(account.get());
+
+//            if (comment.getDate_time() != null) {
+//                comment1.setDate_time(comment.getDate_time());
+//            } else {
+//                comment1.setDate_time(new Date());
+//            }
+
             comment1.setMessage(comment.getMessage());
             commentRepository.save(comment1);
             return true;
         }
+
         return false;
     }
 

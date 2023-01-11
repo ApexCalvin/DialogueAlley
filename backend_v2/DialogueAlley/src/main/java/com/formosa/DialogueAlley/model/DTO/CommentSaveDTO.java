@@ -10,9 +10,7 @@ public class CommentSaveDTO {
 
     private String message;
 
-
-    public CommentSaveDTO() {
-    }
+    public CommentSaveDTO() {}
 
     public Integer getAccount_id() {
         return account_id;
@@ -22,13 +20,9 @@ public class CommentSaveDTO {
         this.account_id = account_id;
     }
 
-    public Date getDate_time() {
-        return date_time;
-    }
+    public Date getDate_time() {return date_time;}
 
-    public void setDate_time(Date date_time) {
-        this.date_time = date_time;
-    }
+    public void setDate_time(Date date_time) {this.date_time = date_time;}
 
     public String getMessage() {
         return message;
