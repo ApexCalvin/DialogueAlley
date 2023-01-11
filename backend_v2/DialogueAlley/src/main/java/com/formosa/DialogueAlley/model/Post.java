@@ -36,6 +36,18 @@ import java.util.List;
                 @ColumnResult(name = "date_time", type = Date.class),
                 @ColumnResult(name = "message", type = String.class)})
 )
+//--------------------------------------------------
+@NamedNativeQuery(name = "query_name2",
+        query = """
+        SELECT a.first_name, a.last_name, a.handle, p.date_time, p.message
+        FROM hashtag h
+        JOIN post_hashtag_xref r ON r.hashtag_id = h.hashtag_id
+        JOIN post p ON p.post_id = r.post_id
+        JOIN account a ON a.account_id = p.account_id
+        WHERE :hashtag = h.hashtag
+        ORDER BY date_time ASC;
+                """,
+        resultSetMapping = "result_set_name")
 public class Post implements Serializable {
 
     @Serial

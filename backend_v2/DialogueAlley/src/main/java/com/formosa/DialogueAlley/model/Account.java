@@ -19,15 +19,15 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer account_id;
     @Column(nullable = false)
-    private String username;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
     private String first_name;
     @Column
     private String last_name;
     @Column(nullable = false)
     private String handle;
+    @Column(nullable = false)
+    private String username;
+    @Column(nullable = false)
+    private String password;
 
     @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL,
                 mappedBy = "assoc_account", targetEntity = Post.class)

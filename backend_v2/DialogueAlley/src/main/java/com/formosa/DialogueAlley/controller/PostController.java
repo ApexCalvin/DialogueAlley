@@ -22,8 +22,7 @@ import java.util.Objects;
 public class PostController {
     @Autowired
     PostServices postServices;
-    @Autowired
-    AccountRepository accountRepository;
+
     @Autowired
     PostRepository postRepository;
 
@@ -76,8 +75,8 @@ public class PostController {
         return postRepository.findPostsByAccountId(handle);
     }
 
-//    @GetMapping("/searchHashtag/{hashtag}")
-//    public List<Post> findPostsByHashtag(@PathVariable String hashtag) {
-//        return postServices.findPostsByHashtag(hashtag);
-//    }
+    @GetMapping("/searchHashtag/{hashtag}")
+    public List<PostListDTO> findPostsByHashtag(@PathVariable String hashtag) {
+        return postRepository.findPostsByHashtagId(hashtag);
+    }
 }

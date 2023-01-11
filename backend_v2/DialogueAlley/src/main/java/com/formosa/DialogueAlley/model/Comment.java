@@ -1,13 +1,11 @@
 package com.formosa.DialogueAlley.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.formosa.DialogueAlley.repository.AccountRepository;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Comment")
@@ -28,12 +26,10 @@ public class Comment implements Serializable {
     @JsonIgnoreProperties("postComments")
     private Account assoc_account;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
     @JsonIgnoreProperties("postComments")
     private Post assoc_post;
-
-
 
     public Comment() {}
 
@@ -57,7 +53,7 @@ public class Comment implements Serializable {
 
     public void setAssoc_post(Post assoc_post) {this.assoc_post = assoc_post;}
 
-    public Account getAssoc_account() {
+    public Account getAssoc_account(Account account) {
         return assoc_account;
     }
 

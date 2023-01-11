@@ -14,6 +14,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(name = "query_name", nativeQuery = true)
     List<PostListDTO> findPostsByAccountId(String handle);
 
+    @Query(name = "query_name2", nativeQuery = true)
+    List<PostListDTO> findPostsByHashtagId(String hashtag);
+
 //    List<Post> findPostsByPostHashtagCrossReferenceId(Integer PostHashtagCrossReferenceId);
 
 
