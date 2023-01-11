@@ -1,6 +1,8 @@
 package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Account;
+import com.formosa.DialogueAlley.model.DTO.PostListDTO;
+import com.formosa.DialogueAlley.model.DTO.PostSaveDTO;
 import com.formosa.DialogueAlley.model.Post;
 import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.PostRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/post")
@@ -26,9 +29,15 @@ public class PostController {
 
 
     @PostMapping("/add")
-    public String addPost(@RequestBody Post post) {
-        postServices.savePost(post);
-        return "Post has been created.";
+    public String addPost(@RequestBody PostSaveDTO post) {
+
+        boolean exist = postServices.savePost(post);
+
+        if (exist) {
+            return "Post has been created.";
+        } else {
+            return "Failed to create a post.";
+        }
     }
 
     @GetMapping("/all")
@@ -52,22 +61,21 @@ public class PostController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Post> updateProfile(@RequestBody Post post, @PathVariable Integer id) {
-        try{
-            postServices.savePost(post);
-            return new ResponseEntity<>(post, HttpStatus.OK);
-        }catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Post> updateProfile(@RequestBody Post post, @PathVariable Integer id) {
+//        try{
+//            postServices.savePost(post);
+//            return new ResponseEntity<>(post, HttpStatus.OK);
+//        }catch (NoSuchElementException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+    @GetMapping("/searchHandle/{handle}")
+    public List<PostListDTO> findPostsByHandle(@PathVariable String handle) {
+        return postRepository.findPostsByAccountId(handle);
     }
 
-//    @GetMapping("/searchHandle/{handle}")
-//    public List<Post> findPostsByHandle(@PathVariable String handle) {
-//        Account account = accountRepository.findAccountByHandle(handle);
-//        return postRepository.findPostsByAccountId(account.getId());
-//    }
-//
 //    @GetMapping("/searchHashtag/{hashtag}")
 //    public List<Post> findPostsByHashtag(@PathVariable String hashtag) {
 //        return postServices.findPostsByHashtag(hashtag);

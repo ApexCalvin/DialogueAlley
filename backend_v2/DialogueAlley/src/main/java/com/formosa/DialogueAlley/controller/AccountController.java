@@ -1,6 +1,9 @@
 package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Account;
+import com.formosa.DialogueAlley.model.DTO.LoginInfoDTO;
+import com.formosa.DialogueAlley.model.DTO.LoginReponseDTO;
+import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.services.AccountServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,8 @@ import java.util.NoSuchElementException;
 public class AccountController {
     @Autowired
     AccountServices accountServices;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @PostMapping("/add")
     public String addAccount(@RequestBody Account account) {
@@ -52,5 +57,18 @@ public class AccountController {
     public String deleteAccountById(@PathVariable Integer id) {
         accountServices.deleteAccountById(id);
         return "Account "+id+" has been deleted.";
+    }
+
+    public LoginReponseDTO getLoginInfo(@RequestBody LoginInfoDTO login) { //VERIFY/AUTHENTICATION
+        Account account = accountRepository.findAccountByUsername(login.username());
+
+        // Conditional for username existence
+
+        if(account.getPassword().equals(login.password())) {
+            account.setPassword(null);
+            return new LoginReponseDTO(account, "Login info received.");
+        }
+
+        return new LoginReponseDTO(null , "Failed to login");
     }
 }

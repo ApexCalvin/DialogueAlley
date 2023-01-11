@@ -20,8 +20,9 @@ public class Hashtag implements Serializable {
     @Column
     private String hashtag;
 
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true,
+                mappedBy = "hashtag") //targetEntity = PostHashtagCrossReference.class
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "hashtag")
     private List<PostHashtagCrossReference> crossReferenceToPost;
 
     public Hashtag() {}
