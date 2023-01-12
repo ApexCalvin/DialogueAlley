@@ -56,6 +56,7 @@ public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer post_id;
+
     @Column
     private Date date_time;
     @Column(nullable = false)
