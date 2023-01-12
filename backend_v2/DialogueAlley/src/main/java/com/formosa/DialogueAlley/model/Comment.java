@@ -1,14 +1,35 @@
 package com.formosa.DialogueAlley.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.formosa.DialogueAlley.model.DTO.PostListDTO;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "Comment")
+@NamedNativeQuery(name = "query_name3",
+        query = """
+        SELECT a.first_name, a.last_name, a.handle, c.date_time, c.message
+        FROM comment c
+        JOIN post p ON c.post_id = p.post_id
+        JOIN account a ON a.account_id = p.account_id
+        WHERE :id = c.post_id
+        ORDER BY date_time ASC;
+                """,
+        resultSetMapping = "result_set_name1")
+// TELLING NAMED QUERY WHAT RESULT SET TO MAP TO
+@SqlResultSetMapping(
+        name = "result_set_name1",
+        classes = @ConstructorResult(targetClass = PostListDTO.class,columns = {
+                @ColumnResult(name = "first_name", type = String.class),
+                @ColumnResult(name = "last_name", type = String.class),
+                @ColumnResult(name = "handle", type = String.class),
+                @ColumnResult(name = "date_time", type = Date.class),
+                @ColumnResult(name = "message", type = String.class)})
+)
 public class Comment implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -21,7 +42,7 @@ public class Comment implements Serializable {
     @Column(nullable = false)
     private String message;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id")
     @JsonIgnoreProperties("postComments")
     private Account assoc_account;

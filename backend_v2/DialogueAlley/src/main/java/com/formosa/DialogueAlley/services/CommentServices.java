@@ -8,7 +8,7 @@ import com.formosa.DialogueAlley.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +27,11 @@ public class CommentServices {
             Comment comment1 = new Comment();
             comment1.setAssoc_account(account.get());
 
-//            if (comment.getDate_time() != null) {
-//                comment1.setDate_time(comment.getDate_time());
-//            } else {
-//                comment1.setDate_time(new Date());
-//            }
+            if (comment.getDate_time() != null) {
+                comment1.setDate_time(comment.getDate_time());
+            } else {
+                comment1.setDate_time(new Date());
+            }
 
             comment1.setMessage(comment.getMessage());
             commentRepository.save(comment1);

@@ -2,6 +2,8 @@ package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Comment;
 import com.formosa.DialogueAlley.model.DTO.CommentSaveDTO;
+import com.formosa.DialogueAlley.model.DTO.PostListDTO;
+import com.formosa.DialogueAlley.repository.CommentRepository;
 import com.formosa.DialogueAlley.services.CommentServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ import java.util.NoSuchElementException;
 public class CommentController {
     @Autowired
     CommentServices commentServices;
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @PostMapping("/add")
     public String addComment(@RequestBody CommentSaveDTO comment) {
@@ -58,5 +63,10 @@ public class CommentController {
     public String deleteCCommentById(@PathVariable Integer id) {
         commentServices.deleteCommentById(id);
         return "Comment "+id+" has been deleted.";
+    }
+
+    @GetMapping("/allComments/{id}")
+    public List<PostListDTO> findCommentsByPost(@PathVariable Integer id) {
+        return commentRepository.findAllCommentsByPostId(id);
     }
 }
