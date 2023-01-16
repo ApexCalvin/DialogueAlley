@@ -17,7 +17,7 @@ import java.util.Date;
         JOIN post p ON c.post_id = p.post_id
         JOIN account a ON a.account_id = p.account_id
         WHERE :id = c.post_id
-        ORDER BY date_time ASC;
+        ORDER BY date_time DESC;
                 """,
         resultSetMapping = "result_set_name1")
 // TELLING NAMED QUERY WHAT RESULT SET TO MAP TO
