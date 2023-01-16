@@ -22,12 +22,12 @@ class PostTest {
         Comment comment = new Comment();
         Date date_time = new Date();
         post = new Post();
-        postComments.add(comment);
         post.setPost_id(1);
         post.setDate_time(date_time);
         post.setMessage("You're an asshole");
         post.setAssoc_account(assoc_account);
         post.setCrossReferenceToHashtag(crossReferenceToHashtag);
+        post.setPostComments(postComments);
     }
 
     @Test
@@ -60,8 +60,8 @@ class PostTest {
 
     @Test
     void getPostComments() {
-        List<Comment> actual = post.getPostComments();
         List<Comment> expected = postComments;
+        List<Comment> actual = post.getPostComments();
         Assertions.assertEquals(expected, actual);
     }
 

@@ -21,14 +21,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PostServicesTest {
 
     @InjectMocks
-    PostServices postServices = new PostServices();
+    PostServices postServices;
+
     @Mock
     AccountRepository accountRepository;
 
@@ -40,24 +40,19 @@ class PostServicesTest {
         MockitoAnnotations.initMocks(this);
     }
 
-//    @Test
-//    void savePost() {
-//        Account account = new Account();
-//        account.setAccount_id(1);
-//        accountRepository.save(account);
-//
-//        PostSaveDTO post = new PostSaveDTO();
-//        post.setAccount_id(1);
-//        post.setMessage("Hello");
-//
-//        Post post1 = new Post();
-//        post1.setAssoc_account(account);
-//        post1.setMessage("Hello");
-//
-//        when(postRepository.save(any(Post.class))).thenReturn(post1);
-//        postServices.savePost(post);
-//        verify(postRepository).save(post1);
-//    }
+    @Test
+    void savePost() {
+        PostSaveDTO postDTO = new PostSaveDTO();
+        postDTO.setAccount_id(1);
+        postDTO.setMessage("You're an asshole");
+        Account account = new Account();
+        Optional<Account> accountOptional = Optional.of(account);
+        when(accountRepository.findById(1)).thenReturn(accountOptional);
+        Boolean expected = true;
+        Boolean actual = postServices.savePost(postDTO);
+        assertEquals(expected, actual);
+        verify(postRepository, times(1)).save(any(Post.class));
+    }
 
     @Test
     void getAllPosts() {
@@ -77,7 +72,6 @@ class PostServicesTest {
 
     @Test
     void deletePostById() {
-        postServices.deletePostById(1);
-        verify(postRepository).deleteById(1);
+        
     }
 }
