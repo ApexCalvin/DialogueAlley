@@ -23,7 +23,7 @@ import java.util.List;
         JOIN post p
         ON p.account_id = a.account_id
         WHERE :handle = a.handle
-        ORDER BY date_time ASC
+        ORDER BY date_time DESC
         """,
         resultSetMapping = "result_set_name")
 // TELLING NAMED QUERY WHAT RESULT SET TO MAP TO
@@ -45,9 +45,18 @@ import java.util.List;
         JOIN post p ON p.post_id = r.post_id
         JOIN account a ON a.account_id = p.account_id
         WHERE :hashtag = h.hashtag
-        ORDER BY date_time ASC;
+        ORDER BY date_time DESC;
                 """,
         resultSetMapping = "result_set_name")
+@NamedNativeQuery(name = "query_name4",
+        query = """
+                SELECT a.first_name, a.last_name, a.handle, p.date_time, p.message
+                FROM Post p
+                JOIN Account a ON a.account_id = p.account_id
+                ORDER BY date_time DESC;
+                """,
+        resultSetMapping = "result_set_name")
+
 public class Post implements Serializable {
 
     @Serial

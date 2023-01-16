@@ -58,19 +58,12 @@ public class PostServices {
         return postRepository.findById(id).get();
     }
 
+    //public void deletePostById(Integer id) { postRepository.deleteById(id); }
     public void deletePostById(Integer id) {
-        postRepository.deleteById(id);
+        try {
+            postRepository.removePostHashtagXrefs(id);
+            postRepository.removeComments(id);
+            postRepository.removePost(id);
+        } catch (Exception ignored) {}
     }
-
-//    public List<Post> findPostsByHashtag(String hashtag) {
-//        Hashtag h1 = hashtagRepository.findHashtagByHashtag(hashtag);
-//        List<PostHashtagCrossReference> crossRefList = crossReferenceRepository.findPostHashtagCrossReferenceById(h1.getId());
-//
-//        List<Post> postList = new ArrayList<>();
-//
-//        for (PostHashtagCrossReference cf : crossRefList) {
-//            postList.add(cf.getPost());
-//        }
-//        return postList;
-//    }
 }

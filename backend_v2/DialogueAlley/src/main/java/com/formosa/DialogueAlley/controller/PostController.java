@@ -44,6 +44,11 @@ public class PostController {
         return postServices.getAllPosts();
     }
 
+    @GetMapping("/alldesc")
+    public List<PostListDTO> getAllPostsDESC() {
+        return postRepository.findPostsDESC();
+    }
+
     @DeleteMapping("/{id}")
     public String deletePostById(@PathVariable Integer id) {
         postServices.deletePostById(id);
