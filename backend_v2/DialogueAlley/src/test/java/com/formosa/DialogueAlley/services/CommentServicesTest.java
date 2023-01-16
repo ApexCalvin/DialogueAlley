@@ -1,10 +1,13 @@
 package com.formosa.DialogueAlley.services;
 
+import com.formosa.DialogueAlley.model.Account;
 import com.formosa.DialogueAlley.model.Comment;
 import com.formosa.DialogueAlley.model.DTO.CommentSaveDTO;
+import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.CommentRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServicesTest {
@@ -28,18 +29,27 @@ class CommentServicesTest {
     @Mock
     CommentRepository commentRepository;
 
+    @Mock
+    AccountRepository accountRepository;
+
     @BeforeEach
     void initMocks() {
         MockitoAnnotations.initMocks(this);
     }
 
-//    @Test
-//    void saveComment() {
-//        Comment comment1 = new Comment();
-//        when(commentRepository.save(any(Comment.class))).thenReturn(comment1);
-//        commentServices.saveComment(comment1);
-//        verify(commentRepository).save(comment1);
-//    }
+    @Test
+    void saveComment() {
+        CommentSaveDTO commentDTO = new CommentSaveDTO();
+        commentDTO.setAccount_id(1);
+        commentDTO.setMessage("You're an asshole");
+        Account account = new Account();
+        Optional<Account> accountOptional = Optional.of(account);
+        when(accountRepository.findById(1)).thenReturn(accountOptional);
+        Boolean expected = true;
+        Boolean actual = commentServices.saveComment(commentDTO);
+        Assertions.assertEquals(expected, actual);
+        verify(commentRepository, times(1)).save(any(Comment.class));
+    }
 
     @Test
     void getAllComments() {

@@ -1,6 +1,7 @@
 package com.formosa.DialogueAlley.model;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,39 +12,44 @@ import java.util.List;
 @ExtendWith(MockitoExtension.class)
 class PostHashtagCrossReferenceTest {
 
-    List<PostHashtagCrossReference> postHashtagCrossReferenceList = new ArrayList<>();
+    PostHashtagCrossReference postHashtagCrossReference;
 
     Post post;
 
     Hashtag hashtag;
 
-//    @BeforeEach
-//    void setUp() {
-//        post = new Post();
-//        post.setPost_id(1);
-//        hashtag = new Hashtag();
-//        hashtag.setHashtag_id(1);
-//        postHashtagCrossReferenceList.add(0, hashtag);
-//        postHashtagCrossReferenceList.setHashtag(hashtag);
-//        postHashtagCrossReferenceList.setXref_id(1);
-//
-//    }
-//
-//    @Test
-//    void getXref_id() {
-//        Integer actual = postHashtagCrossReferenceList.get();
-//        Integer expected = 1;
-//        Assertions.assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void getPost() {
-//        Post actual = postHashtagCrossReference.getPost();
-//        Post expected = post;
-//        Assertions.assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void getHashtag() {
-//    }
+    @BeforeEach
+    void setUp() {
+        post = new Post();
+        post.setPost_id(1);
+        hashtag = new Hashtag();
+        hashtag.setHashtag("Cowboy");
+
+
+    }
+
+    @Test
+    void getXref_id() {
+        PostHashtagCrossReference xref = new PostHashtagCrossReference();
+        Integer expectedId = 1;
+        xref.setXref_id(expectedId);
+        Integer actualId = xref.getXref_id();
+        Assertions.assertEquals(expectedId, actualId);
+    }
+
+    @Test
+    void getPost() {
+        PostHashtagCrossReference xref = new PostHashtagCrossReference();
+        Post post = new Post();
+        xref.setPost(post);
+        Assertions.assertEquals(post, xref.getPost());
+    }
+
+    @Test
+    void getHashtag() {
+        PostHashtagCrossReference xref = new PostHashtagCrossReference();
+        Hashtag hashtag = new Hashtag();
+        xref.setHashtag(hashtag);
+        Assertions.assertEquals(hashtag, xref.getHashtag());
+    }
 }
