@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 public class AccountController {
     @Autowired
     AccountServices accountServices;
-    @Autowired
+    //@Autowired
     private AccountRepository accountRepository;
 
     @PostMapping("/add")

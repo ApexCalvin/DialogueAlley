@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,8 @@ class PostServicesTest {
     @Mock
     PostRepository postRepository;
 
+    List<Post> postList;
+
     @BeforeEach
     void initMocks() {
         MockitoAnnotations.initMocks(this);
@@ -45,6 +48,21 @@ class PostServicesTest {
         PostSaveDTO postDTO = new PostSaveDTO();
         postDTO.setAccount_id(1);
         postDTO.setMessage("You're an asshole");
+        Account account = new Account();
+        Optional<Account> accountOptional = Optional.of(account);
+        when(accountRepository.findById(1)).thenReturn(accountOptional);
+        Boolean expected = true;
+        Boolean actual = postServices.savePost(postDTO);
+        assertEquals(expected, actual);
+        verify(postRepository, times(1)).save(any(Post.class));
+    }
+
+    @Test
+    void savePostWithDate() {
+        PostSaveDTO postDTO = new PostSaveDTO();
+        postDTO.setAccount_id(1);
+        postDTO.setMessage("You're an asshole");
+        postDTO.setDate_time(new Date());
         Account account = new Account();
         Optional<Account> accountOptional = Optional.of(account);
         when(accountRepository.findById(1)).thenReturn(accountOptional);
@@ -72,6 +90,5 @@ class PostServicesTest {
 
     @Test
     void deletePostById() {
-        
     }
 }
