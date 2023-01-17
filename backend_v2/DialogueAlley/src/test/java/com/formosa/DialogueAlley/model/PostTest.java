@@ -12,16 +12,23 @@ class PostTest {
 
     Post post;
 
-    List<Comment> postComments = new ArrayList<>();
+    Comment comment;
 
-    List<PostHashtagCrossReference> crossReferenceToHashtag = new ArrayList<>();
+    Account assoc_account;
+
+    Date date_time;
+
+    List<Comment> postComments;
+
+    List<PostHashtagCrossReference> crossReferenceToHashtag;
 
     @BeforeEach
     void setUp() {
-        Account assoc_account = new Account();
-        Comment comment = new Comment();
-        Date date_time = new Date();
+        assoc_account = new Account();
+        comment = new Comment();
+        date_time = new Date();
         post = new Post();
+        crossReferenceToHashtag = new ArrayList<>();
         post.setPost_id(1);
         post.setDate_time(date_time);
         post.setMessage("You're an asshole");
@@ -67,5 +74,12 @@ class PostTest {
 
     @Test
     void getCrossReferenceToHashtag() {
+        PostHashtagCrossReference crossRef1 = new PostHashtagCrossReference();
+        crossReferenceToHashtag.add(crossRef1);
+        PostHashtagCrossReference crossRef2 = new PostHashtagCrossReference();
+        crossReferenceToHashtag.add(crossRef2);
+        post.setCrossReferenceToHashtag(crossReferenceToHashtag);
+        List<PostHashtagCrossReference> returnedCrossReferences = post.getCrossReferenceToHashtag();
+        Assertions.assertEquals(crossReferenceToHashtag, returnedCrossReferences);
     }
 }
