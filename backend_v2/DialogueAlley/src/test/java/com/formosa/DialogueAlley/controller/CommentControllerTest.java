@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -89,10 +90,9 @@ class CommentControllerTest {
 
     @Test
     void addComment() throws Exception {
-        commentList = new ArrayList<>();
-        mockMvc.perform(post("/comment/add")
+        mockMvc.perform(put("/comment/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(commentJson))
+                        .content(String.valueOf(commentJson)))
                         .andExpect(status().isOk())
                         .andReturn();
     }
@@ -112,8 +112,8 @@ class CommentControllerTest {
         mockMvc.perform(get("/comment/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.comment_id").value(1));
+                        .andExpect(status().isOk())
+                        .andExpect(MockMvcResultMatchers.jsonPath("$.comment_id").value(1));
     }
 
     @Test

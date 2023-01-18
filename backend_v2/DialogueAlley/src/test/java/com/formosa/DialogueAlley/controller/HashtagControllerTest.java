@@ -78,7 +78,7 @@ class HashtagControllerTest {
 
 
     @Test
-    void addHashtag() throws Exception {
+    void addHashtag() throws Exception{
         mockMvc.perform(put("/hashtag/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(hashtagJson))
