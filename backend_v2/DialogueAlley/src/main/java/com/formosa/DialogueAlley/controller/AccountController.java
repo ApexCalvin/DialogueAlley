@@ -20,7 +20,7 @@ public class AccountController {
     @Autowired
     AccountServices accountServices;
     //@Autowired
-    private AccountRepository accountRepository;
+    AccountRepository accountRepository;
 
     @PostMapping("/add")
     public String addAccount(@RequestBody Account account) {

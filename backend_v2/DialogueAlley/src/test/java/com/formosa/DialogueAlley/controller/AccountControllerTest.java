@@ -16,12 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.NoSuchElementException;
+
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -40,25 +45,26 @@ class AccountControllerTest {
     @MockBean
     AccountServices accountServices;
 
-    @Autowired
-    WebApplicationContext webApplicationContext;
-
     @InjectMocks
     AccountController accountController;
 
+    @Autowired
+    WebApplicationContext webApplicationContext;
+
+
     AccountControllerTest() throws JsonProcessingException {
     }
-    Account account= new Account();
+    Account account;
     ObjectMapper objectMapper = new ObjectMapper();
     String accountJson = objectMapper.writeValueAsString(account);
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
+        account = new Account();
         MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
         account.setAccount_id(123);
     }
-
 
     @Test
     void shouldCreateMockMvc() {
@@ -67,7 +73,7 @@ class AccountControllerTest {
 
     @Test
     void addAccount() throws Exception {
-            mockMvc.perform(post("/account/add")
+            mockMvc.perform(put("/account/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(accountJson))
                 .andExpect(status().isOk())
@@ -79,7 +85,6 @@ class AccountControllerTest {
         mockMvc.perform(get("/account/all")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk());
-
     }
 
     @Test
@@ -93,21 +98,25 @@ class AccountControllerTest {
                         .andExpect(jsonPath("$.account_id").value(123));
     }
     @Test
-    void getAccountByIdFailed() throws Exception {
-        //when(accountServices.getAccountById(anyInt())).thenReturn(account);
+    void getAccountByIdFailed() throws Exception{
+        AccountController accountController = new AccountController();
+        accountController.accountServices = mock(AccountServices.class);
+        when(accountController.accountServices.getAccountById(1)).thenThrow(new NoSuchElementException());
 
-        mockMvc.perform(get("/account/xx")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().is4xxClientError());
+        ResponseEntity<Account> response = accountController.getAccountById(1);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
     @Test
-    void updateAccount() throws Exception {
-        mockMvc.perform(put("/account/123")
+    void updateAccount() throws Exception{
+        mockMvc.perform(patch("/account/123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(accountJson))
                         .andExpect(status().isOk())
                         .andReturn();
+    }
+
+    @Test
+    void updateAccountFailed() throws Exception{
     }
 
     @Test

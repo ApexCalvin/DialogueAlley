@@ -52,7 +52,9 @@ public class CommentController {
 //    @PutMapping("/{id}")
 //    public ResponseEntity<Comment> updateComment(@RequestBody Comment comment, @PathVariable Integer id) {
 //        try{
-//            commentServices.saveComment(comment);
+//            CommentSaveDTO commentSaveDTO = new CommentSaveDTO();
+//            commentServices.saveComment(commentSaveDTO);
+//            commentRepository.save(comment);
 //            return new ResponseEntity<>(comment, HttpStatus.OK);
 //        }catch (NoSuchElementException e) {
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
