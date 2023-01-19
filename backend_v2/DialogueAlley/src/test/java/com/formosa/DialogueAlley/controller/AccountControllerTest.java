@@ -3,7 +3,7 @@ package com.formosa.DialogueAlley.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formosa.DialogueAlley.model.Account;
-import com.formosa.DialogueAlley.repository.PostRepository;
+import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.services.AccountServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,14 +23,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(AccountController.class)
@@ -40,7 +39,7 @@ class AccountControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    PostRepository postRepository;
+    AccountRepository accountRepository;
 
     @MockBean
     AccountServices accountServices;
@@ -54,6 +53,8 @@ class AccountControllerTest {
 
     AccountControllerTest() throws JsonProcessingException {
     }
+
+    List<Account> accountList;
     Account account;
     ObjectMapper objectMapper = new ObjectMapper();
     String accountJson = objectMapper.writeValueAsString(account);
@@ -73,11 +74,15 @@ class AccountControllerTest {
 
     @Test
     void addAccount() throws Exception {
-            mockMvc.perform(put("/account/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(accountJson))
+        Account account = new Account();
+        accountJson = objectMapper.writeValueAsString(account);
+        mockMvc.perform(post("/account/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(accountJson))
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(content().string("Account has been created."));
+        verify(accountServices, times(1)).saveAccount(account);
+        verify(accountRepository, times(1)).save(account);
     }
 
     @Test
@@ -98,7 +103,7 @@ class AccountControllerTest {
                         .andExpect(jsonPath("$.account_id").value(123));
     }
     @Test
-    void getAccountByIdFailed() throws Exception{
+    void getAccountByIdFailed() {
         AccountController accountController = new AccountController();
         accountController.accountServices = mock(AccountServices.class);
         when(accountController.accountServices.getAccountById(1)).thenThrow(new NoSuchElementException());
@@ -108,7 +113,7 @@ class AccountControllerTest {
     }
     @Test
     void updateAccount() throws Exception{
-        mockMvc.perform(patch("/account/123")
+        mockMvc.perform(post("/account/123")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(accountJson))
                         .andExpect(status().isOk())

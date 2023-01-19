@@ -24,9 +24,4 @@ INSERT INTO `DialogueAlley`.`post_hashtag_xref` (`hashtag_id`, `post_id`) VALUES
 INSERT INTO `DialogueAlley`.`post_hashtag_xref` (`hashtag_id`, `post_id`) VALUES ('2', '8');
 
 
-localhost:8080/post/searchHandle/Scone
-
-localhost:8080/post/searchHashtag/Food
-
-localhost:8080/comment/allComments/1
 

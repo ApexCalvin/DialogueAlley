@@ -1,6 +1,7 @@
 package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Hashtag;
+import com.formosa.DialogueAlley.repository.HashtagRepository;
 import com.formosa.DialogueAlley.services.HashtagServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,13 @@ import java.util.NoSuchElementException;
 public class HashtagController {
     @Autowired
     HashtagServices hashtagServices;
+    @Autowired
+    HashtagRepository hashtagRepository;
 
     @PostMapping("/add")
     public String addHashtag(@RequestBody Hashtag hashtag) {
         hashtagServices.saveHashtag(hashtag);
+        hashtagRepository.save(hashtag);
         return "Hashtag has been created.";
     }
 

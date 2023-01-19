@@ -59,16 +59,16 @@ public class AccountController {
         return "Account "+id+" has been deleted.";
     }
 
-    public LoginReponseDTO getLoginInfo(@RequestBody LoginInfoDTO login) { //VERIFY/AUTHENTICATION
-        Account account = accountRepository.findAccountByUsername(login.username());
-
-        // Conditional for username existence
-
-        if(account.getPassword().equals(login.password())) {
-            account.setPassword(null);
-            return new LoginReponseDTO(account, "Login info received.");
-        }
-
-        return new LoginReponseDTO(null , "Failed to login");
-    }
+//    public LoginReponseDTO getLoginInfo(@RequestBody LoginInfoDTO login) { //VERIFY/AUTHENTICATION
+//        Account account = accountRepository.findAccountByUsername(login.username());
+//
+//        // Conditional for username existence
+//
+//        if(account.getPassword().equals(login.password())) {
+//            account.setPassword(null);
+//            return new LoginReponseDTO(account, "Login info received.");
+//        }
+//
+//        return new LoginReponseDTO(null , "Failed to login");
+//    }
 }
