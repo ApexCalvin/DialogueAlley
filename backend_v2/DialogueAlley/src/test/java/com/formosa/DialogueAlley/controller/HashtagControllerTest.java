@@ -61,14 +61,15 @@ class HashtagControllerTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
 
-    String hashtagJson = objectMapper.writeValueAsString(hashtag);
+    String hashtagJson;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException {
         hashtag = new Hashtag();
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(hashtagController).build();
         hashtag.setHashtag_id(1);
+        hashtagJson = objectMapper.writeValueAsString(hashtag);
     }
 
     @Test
@@ -79,7 +80,7 @@ class HashtagControllerTest {
 
     @Test
     void addHashtag() throws Exception{
-        mockMvc.perform(put("/hashtag/add")
+        mockMvc.perform(post("/hashtag/add")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(hashtagJson))
                 .andExpect(status().isOk())
