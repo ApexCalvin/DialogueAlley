@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formosa.DialogueAlley.model.PostHashtagCrossReference;
 import com.formosa.DialogueAlley.repository.PostHashtagCrossReferenceRepository;
 import com.formosa.DialogueAlley.services.PostHashtagCrossReferenceServices;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,31 +16,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.NoSuchElementException;
+
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(PostHashtagCrossReference.class)
+@WebMvcTest(PostHashtagCrossReferenceController.class)
 @AutoConfigureMockMvc
 class PostHashtagCrossReferenceControllerTest {
+
+    @Autowired
+    MockMvc mockMvc;
 
     @MockBean
     PostHashtagCrossReferenceRepository postHashtagCrossReferenceRepository;
 
     @MockBean
-    PostHashtagCrossReferenceServices postHashtagCrossReferenceServices;
+    PostHashtagCrossReferenceServices crossReferenceServices;
 
     @InjectMocks
     PostHashtagCrossReferenceController postHashtagCrossReferenceController;
 
+    @Autowired
     WebApplicationContext webApplicationContext;
 
     PostHashtagCrossReference postHashtagCrossReference;
@@ -48,9 +58,9 @@ class PostHashtagCrossReferenceControllerTest {
 
     String crossRefJson;
 
+    PostHashtagCrossReferenceControllerTest() throws JsonProcessingException {
+    }
 
-    @Autowired
-    MockMvc mockMvc;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
@@ -59,6 +69,11 @@ class PostHashtagCrossReferenceControllerTest {
         crossRefJson = objectMapper.writeValueAsString(postHashtagCrossReference);
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(postHashtagCrossReferenceController).build();
+    }
+
+    @Test
+    void shouldCreateMockMvc() {
+        Assertions.assertNotNull(mockMvc);
     }
 
     @Test
@@ -79,13 +94,23 @@ class PostHashtagCrossReferenceControllerTest {
 
     @Test
     void getCrossRefById() throws Exception {
-        when(postHashtagCrossReferenceServices.getCrossReferenceById(anyInt())).thenReturn(postHashtagCrossReference);
+        when(crossReferenceServices.getCrossReferenceById(anyInt())).thenReturn(postHashtagCrossReference);
 
         mockMvc.perform(get("/crossRef/1")
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.xref_id").value(1));
+    }
+
+    @Test
+    void getCrossRefByIdFailed() throws JsonProcessingException{
+        PostHashtagCrossReferenceController postHashtagCrossReferenceController = new PostHashtagCrossReferenceController();
+        postHashtagCrossReferenceController.crossReference = mock(PostHashtagCrossReferenceServices.class);
+        when(postHashtagCrossReferenceController.crossReference.getCrossReferenceById(1)).thenThrow(new NoSuchElementException());
+
+        ResponseEntity<PostHashtagCrossReference> response = postHashtagCrossReferenceController.getCrossRefById(1);
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test

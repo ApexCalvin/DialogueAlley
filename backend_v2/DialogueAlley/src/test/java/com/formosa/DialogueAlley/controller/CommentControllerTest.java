@@ -2,13 +2,11 @@ package com.formosa.DialogueAlley.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.formosa.DialogueAlley.model.Account;
 import com.formosa.DialogueAlley.model.Comment;
 import com.formosa.DialogueAlley.model.DTO.CommentSaveDTO;
 import com.formosa.DialogueAlley.model.Post;
 import com.formosa.DialogueAlley.repository.CommentRepository;
 import com.formosa.DialogueAlley.services.CommentServices;
-import com.formosa.DialogueAlley.services.PostServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,8 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -34,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -106,7 +102,7 @@ class CommentControllerTest {
         when(commentServices.getCommentById(1)).thenThrow(new NoSuchElementException());
 
         ResponseEntity<Comment> response = commentController.getCommentById(1);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -146,4 +142,29 @@ class CommentControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.comment_id").value(1));
     }
+
+    @Test
+    void updateComment() throws Exception {
+        mockMvc.perform(put("/comment/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(commentJson))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    void updateCommentFailed() {
+        //Act and Assert
+        try {
+            mockMvc.perform(put("/comment/update/{id}", comment.getComment_id())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(String.valueOf(commentSaveDTO)))
+                    .andExpect(status().isNotFound())
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }

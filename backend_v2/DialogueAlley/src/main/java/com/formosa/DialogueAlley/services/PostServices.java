@@ -2,9 +2,7 @@ package com.formosa.DialogueAlley.services;
 
 import com.formosa.DialogueAlley.model.Account;
 import com.formosa.DialogueAlley.model.DTO.PostSaveDTO;
-import com.formosa.DialogueAlley.model.Hashtag;
 import com.formosa.DialogueAlley.model.Post;
-import com.formosa.DialogueAlley.model.PostHashtagCrossReference;
 import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.HashtagRepository;
 import com.formosa.DialogueAlley.repository.PostHashtagCrossReferenceRepository;
@@ -12,7 +10,6 @@ import com.formosa.DialogueAlley.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,10 +20,10 @@ public class PostServices {
     PostRepository postRepository;
     @Autowired
     AccountRepository accountRepository;
-//    @Autowired
-//    HashtagRepository hashtagRepository;
-//    @Autowired
-//    PostHashtagCrossReferenceRepository crossReferenceRepository;
+    @Autowired
+    HashtagRepository hashtagRepository;
+    @Autowired
+    PostHashtagCrossReferenceRepository crossReferenceRepository;
 
     public Boolean savePost(PostSaveDTO post) {
 

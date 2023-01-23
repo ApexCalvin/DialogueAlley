@@ -4,6 +4,7 @@ import com.formosa.DialogueAlley.model.Account;
 import com.formosa.DialogueAlley.model.Comment;
 import com.formosa.DialogueAlley.model.DTO.PostSaveDTO;
 import com.formosa.DialogueAlley.model.Post;
+import com.formosa.DialogueAlley.model.PostHashtagCrossReference;
 import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.*;
 class PostServicesTest {
 
     @InjectMocks
-    PostServices postServices;
+    PostServices postServices = new PostServices();
 
     @Mock
     AccountRepository accountRepository;
@@ -36,7 +37,11 @@ class PostServicesTest {
     @Mock
     PostRepository postRepository;
 
-    List<Post> postList;
+    Post post;
+
+    Comment comment;
+
+    PostHashtagCrossReference postHashtagCrossReference;
 
     @BeforeEach
     void initMocks() {
@@ -90,5 +95,7 @@ class PostServicesTest {
 
     @Test
     void deletePostById() {
+        postServices.deletePostById(1);
+        verify(postRepository).deleteById(1);
     }
 }

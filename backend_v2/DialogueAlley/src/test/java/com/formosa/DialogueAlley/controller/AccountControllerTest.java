@@ -50,17 +50,16 @@ class AccountControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
-
-    AccountControllerTest() throws JsonProcessingException {
-    }
-
     List<Account> accountList;
     Account account;
     ObjectMapper objectMapper = new ObjectMapper();
     String accountJson;
 
+    AccountControllerTest() throws JsonProcessingException {
+    }
+
     @BeforeEach
-    void setUp() throws Exception{
+    void setUp() throws JsonProcessingException{
         account = new Account();
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
