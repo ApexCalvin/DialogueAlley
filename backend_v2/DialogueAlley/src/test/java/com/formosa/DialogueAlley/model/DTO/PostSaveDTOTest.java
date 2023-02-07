@@ -11,11 +11,14 @@ class PostSaveDTOTest {
 
     PostSaveDTO postSaveDTO;
 
+    Date date;
+
     @BeforeEach
     void setUp() {
+        date = new Date();
         postSaveDTO = new PostSaveDTO();
         postSaveDTO.setAccount_id(1);
-        postSaveDTO.setDate_time(new Date());
+        postSaveDTO.setDate_time(date);
         postSaveDTO.setMessage("Goodbye");
     }
 
@@ -26,7 +29,7 @@ class PostSaveDTOTest {
 
     @Test
     void getDate_time() {
-        assertEquals(new Date(), postSaveDTO.getDate_time());
+        assertEquals(date, postSaveDTO.getDate_time());
     }
 
     @Test

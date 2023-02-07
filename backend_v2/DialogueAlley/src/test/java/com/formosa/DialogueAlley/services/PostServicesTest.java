@@ -96,6 +96,9 @@ class PostServicesTest {
     @Test
     void deletePostById() {
         postServices.deletePostById(1);
-        verify(postRepository).deleteById(1);
+        verify(postRepository).removePostHashtagXrefs(1);
+        verify(postRepository).removeComments(1);
+        verify(postRepository).removePost(1);
+
     }
 }
