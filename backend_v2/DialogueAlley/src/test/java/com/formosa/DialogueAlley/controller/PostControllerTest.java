@@ -9,7 +9,6 @@ import com.formosa.DialogueAlley.model.DTO.PostSaveDTO;
 import com.formosa.DialogueAlley.model.Post;
 import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.PostRepository;
-import com.formosa.DialogueAlley.services.AccountServices;
 import com.formosa.DialogueAlley.services.PostServices;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,19 +24,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,6 +67,8 @@ class PostControllerTest {
     PostSaveDTO postSaveDTO;
 
     Handle handle;
+
+    Date date;
     PostListDTO postListDTO;
     List<PostListDTO> postListList;
     Post post;
@@ -104,11 +104,11 @@ class PostControllerTest {
 
     @Test
     void addPost() throws Exception {
-            mockMvc.perform(post("/post/add")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(String.valueOf(postJson)))
-            .andExpect(status().isOk())
-            .andReturn();
+        mockMvc.perform(post("/post/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.valueOf(postJson)))
+                .andExpect(status().isOk())
+                .andReturn();
     }
 
     @Test
@@ -121,7 +121,7 @@ class PostControllerTest {
     @Test
     void deletePostById() throws Exception {
         mockMvc.perform(delete("/post/1")
-                        .param("post_id","1")
+                        .param("post_id", "1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -145,11 +145,11 @@ class PostControllerTest {
         when(postController.postServices.getPostById(1)).thenThrow(new NoSuchElementException());
 
         ResponseEntity<Post> response = postController.getProfileById(1);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
-    void findPostsByHandle() throws Exception{
+    void findPostsByHandle() throws Exception {
         when(postRepository.findPostsByAccountId("cowboy")).thenReturn(postListList);
         mockMvc.perform(get("/post/searchHandle/cowboy")
                         .accept(MediaType.APPLICATION_JSON)
@@ -158,21 +158,18 @@ class PostControllerTest {
 
     }
 
-//    @Test
-//    void findPostsByHandleFailed() {
-//        PostController postController = new PostController();
-//        postController.postServices = mock(PostServices.class);
-//        when(postController.postServices.getPostById(1)).thenThrow(new NoSuchElementException());
-//
-//        ResponseEntity<Post> response = postController.findPostsByHashtag("cowboy");
-//        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-//    }
+    @Test
+    void findPostsByHandleFailed() {
+        PostController postController = new PostController();
+        postController.postServices = mock(PostServices.class);
+        when(postController.postServices.getPostById(1)).thenThrow(new NoSuchElementException());
+
+        ResponseEntity<Post> response = postController.getProfileById(1);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 
     @Test
-    void findPostsByHashtag() throws Exception{
-//        List<PostListDTO> postList = new ArrayList<>();
-//        PostListDTO post = new PostListDTO();
-       // postList.add(post);
+    void findPostsByHashtag() throws Exception {
         when(postRepository.findPostsByHashtagId("hashtag")).thenReturn(postListList);
 
         mockMvc.perform(get("/post/searchHashtag/1")
@@ -183,6 +180,34 @@ class PostControllerTest {
     }
 
     @Test
-    void getAllPostsDESC() {
+    void UpdatePost() throws Exception {
+        mockMvc.perform(put("/post/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(postJson))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    void updatePostFailed() {
+        try {
+            mockMvc.perform(put("/post/update/{id}", post.getPost_id())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(String.valueOf(postSaveDTO)))
+                    .andExpect(status().isNotFound())
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+//    @Test
+//    void getAllPostsDESC() throws Exception {
+//        when(postRepository.findPostsByAccountId("cowboy")).thenReturn(postListList);
+//        mockMvc.perform(get("/post/all/desc"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$[0].post_id").value(anyInt()))
+//                .andExpect(jsonPath("$[0].assoc_account.handle").value("cowboy"));
+//    }
     }
 }

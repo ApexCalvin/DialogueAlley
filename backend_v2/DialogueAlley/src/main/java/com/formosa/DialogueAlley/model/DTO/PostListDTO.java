@@ -14,25 +14,14 @@ public class PostListDTO {
 
     private String message;
 
-    public PostListDTO() {
-    }
-
-    public PostListDTO(String first_name, String last_name, String handle, Date date_time, String message) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.handle = handle;
-        this.date_time = date_time;
-        this.message = message;
-    }
+    public PostListDTO() {}
 
     public String getFirst_name() {
         return first_name;
     }
-
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
-
     public String getLast_name() {
         return last_name;
     }

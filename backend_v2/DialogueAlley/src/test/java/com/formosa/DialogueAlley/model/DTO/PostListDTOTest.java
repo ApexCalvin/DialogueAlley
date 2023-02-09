@@ -11,6 +11,8 @@ class PostListDTOTest {
 
     PostListDTO postListDTO;
 
+    Date date;
+
     @BeforeEach
     void setUp() {
         postListDTO = new PostListDTO();
@@ -18,7 +20,7 @@ class PostListDTOTest {
         postListDTO.setLast_name("Morris");
         postListDTO.setHandle("Doc Holiday");
         postListDTO.setMessage("Lets go over there");
-        postListDTO.setDate_time(new Date());
+        postListDTO.setDate_time(date);
     }
 
     @Test
@@ -38,7 +40,7 @@ class PostListDTOTest {
 
     @Test
     void getDate_time() {
-        assertEquals(new Date(), postListDTO.getDate_time());
+        assertEquals(date, postListDTO.getDate_time());
     }
 
     @Test
