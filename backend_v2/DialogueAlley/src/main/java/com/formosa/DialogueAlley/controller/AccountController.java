@@ -1,8 +1,6 @@
 package com.formosa.DialogueAlley.controller;
 
 import com.formosa.DialogueAlley.model.Account;
-import com.formosa.DialogueAlley.model.DTO.LoginInfoDTO;
-import com.formosa.DialogueAlley.model.DTO.LoginReponseDTO;
 import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.services.AccountServices;
 import org.springframework.beans.factory.annotation.Autowired;

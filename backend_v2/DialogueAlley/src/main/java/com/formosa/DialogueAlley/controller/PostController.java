@@ -1,10 +1,9 @@
 package com.formosa.DialogueAlley.controller;
 
-import com.formosa.DialogueAlley.model.Account;
+import com.formosa.DialogueAlley.model.DTO.CommentSaveDTO;
 import com.formosa.DialogueAlley.model.DTO.PostListDTO;
 import com.formosa.DialogueAlley.model.DTO.PostSaveDTO;
 import com.formosa.DialogueAlley.model.Post;
-import com.formosa.DialogueAlley.repository.AccountRepository;
 import com.formosa.DialogueAlley.repository.PostRepository;
 import com.formosa.DialogueAlley.services.PostServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/post")
@@ -25,6 +23,10 @@ public class PostController {
 
     @Autowired
     PostRepository postRepository;
+
+    PostSaveDTO postSaveDTO;
+
+    Post post;
 
 
     @PostMapping("/add")
@@ -65,15 +67,17 @@ public class PostController {
         }
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Post> updateProfile(@RequestBody Post post, @PathVariable Integer id) {
-//        try{
-//            postServices.savePost(post);
-//            return new ResponseEntity<>(post, HttpStatus.OK);
-//        }catch (NoSuchElementException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Post> updatePost(@RequestBody Post post, @PathVariable Integer id) {
+        try{
+            postSaveDTO = new PostSaveDTO();
+            postServices.savePost(postSaveDTO);
+            postRepository.save(post);
+            return new ResponseEntity<>(post, HttpStatus.OK);
+        }catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping("/searchHandle/{handle}")
     public List<PostListDTO> findPostsByHandle(@PathVariable String handle) {

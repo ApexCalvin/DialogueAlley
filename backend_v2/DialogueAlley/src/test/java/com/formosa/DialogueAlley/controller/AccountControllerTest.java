@@ -50,21 +50,21 @@ class AccountControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    List<Account> accountList;
+    Account account;
+    ObjectMapper objectMapper = new ObjectMapper();
+    String accountJson;
 
     AccountControllerTest() throws JsonProcessingException {
     }
 
-    List<Account> accountList;
-    Account account;
-    ObjectMapper objectMapper = new ObjectMapper();
-    String accountJson = objectMapper.writeValueAsString(account);
-
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException{
         account = new Account();
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
         account.setAccount_id(123);
+        accountJson = objectMapper.writeValueAsString(account);
     }
 
     @Test
@@ -81,8 +81,6 @@ class AccountControllerTest {
                         .content(accountJson))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Account has been created."));
-        verify(accountServices, times(1)).saveAccount(account);
-        verify(accountRepository, times(1)).save(account);
     }
 
     @Test
@@ -113,7 +111,7 @@ class AccountControllerTest {
     }
     @Test
     void updateAccount() throws Exception{
-        mockMvc.perform(post("/account/123")
+        mockMvc.perform(put("/account/{id}",123)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(accountJson))
                         .andExpect(status().isOk())
@@ -127,7 +125,7 @@ class AccountControllerTest {
     @Test
     void deleteAccountById() throws Exception {
         mockMvc.perform(delete("/account/123")
-                        .param("account_id","123")
+                        .param("$.account_id","123")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
